@@ -1,4 +1,5 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey, ForeignKey, BelongsTo, Default} from "sequelize-typescript"
+import AdminModel from "./AdminModel"
 
 @Table({ 
     tableName: "complex",
@@ -41,6 +42,16 @@ class ComplexModel extends Model {
         type: DataType.INTEGER
     })
     declare phone: number
+
+    @ForeignKey(() => AdminModel)
+    @Column({
+        type: DataType.INTEGER,
+        allowNull: false,
+    })
+    declare adminId: number;
+
+    @BelongsTo(() => AdminModel)
+    admin: AdminModel;
 
 }
 
