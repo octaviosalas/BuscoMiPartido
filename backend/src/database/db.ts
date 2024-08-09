@@ -10,7 +10,7 @@ const database = new Sequelize(process.env.POSTGRE_URL!, {
 const connectDatabase = async () => { 
     try {
         await database.authenticate()
-        database.sync()
+        await database.sync({ alter: true });
         console.log("PostgreSQL DataBase BuscoMiPartido / Supabase IS CONNECTED")
     } catch (error) {
        console.log("Error en la conexión a la base de datos", error)
