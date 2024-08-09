@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import bodyParser from "body-parser"
 import dotenv from "dotenv"
-//import connectDatabase from "./database/db"
+import connectDatabase from "./database/db"
 //import UserRoutes from "./routes/User"
 //import TasksRoutes from "./routes/Task"
 
@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.listen(port, () => { 
      console.log(`REST API BuscoPartido - TypeScript funcionando en el puerto ${port}`)
-  //   connectDatabase()
+     connectDatabase()
 })
 
 

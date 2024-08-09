@@ -21,6 +21,11 @@ class UserModel extends Model {
     @Column ({ 
         type: DataType.STRING
     })
+    declare email: string
+
+    @Column ({ 
+        type: DataType.STRING
+    })
     declare password: string
 
     @HasMany(() => TeamModel, { foreignKey: 'admin' }) 
