@@ -3,8 +3,7 @@ import cors from "cors"
 import bodyParser from "body-parser"
 import dotenv from "dotenv"
 import connectDatabase from "./database/db"
-//import UserRoutes from "./routes/User"
-//import TasksRoutes from "./routes/Task"
+import TokenRoutes from "./routes/Token"
 
 const port = process.env.PORT || 4000
 
@@ -15,9 +14,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
 
-//app.use("/users", UserRoutes);
-//app.use("/tasks", TasksRoutes);
-
+app.use("/token", TokenRoutes);
 
 app.listen(port, () => { 
      console.log(`REST API BuscoPartido - TypeScript funcionando en el puerto ${port}`)
