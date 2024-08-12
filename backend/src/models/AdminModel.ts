@@ -1,4 +1,4 @@
-import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, ForeignKey, BelongsTo} from "sequelize-typescript"
+import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, Default} from "sequelize-typescript"
 import TeamModel from "./TeamModel"; // Importa el modelo de jugadores
 import ComplexModel from "./ComplexModel";
 
@@ -22,7 +22,18 @@ class AdminModel extends Model {
     @Column ({ 
         type: DataType.STRING
     })
+    declare name: string
+
+    @Column ({ 
+        type: DataType.STRING
+    })
     declare password: string
+
+    @Default(false)
+    @Column ({ 
+        type: DataType.BOOLEAN
+    })
+    declare confirmed: boolean
         
     @HasMany(() => ComplexModel, { foreignKey: 'adminId' }) 
     complexData: ComplexModel[];
