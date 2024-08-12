@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
-import { createComplex } from "../controllers/Complex"
+import { createComplex, getEveryComplex, getComplexByLocation } from "../controllers/Complex"
 import { handleInputErrors } from "../middlewares/HandleErrors"
 import { validateAdminExist } from "../middlewares/AdminValidations"
 
@@ -19,7 +19,15 @@ router.post("/createComplex/:adminId",
     createComplex
 )
 
-router.get("/everyComplex")
+router.get("/everyComplex",
+    getEveryComplex
+)
+
+router.get("/complexByLocation",
+    body("location").notEmpty().withMessage("La localidad es obligatoria"),
+    handleInputErrors,
+    getComplexByLocation
+)
 
 router.get("/complexData/:complexId")
 

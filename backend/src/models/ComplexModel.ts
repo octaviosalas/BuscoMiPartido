@@ -1,5 +1,6 @@
-import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey, ForeignKey, BelongsTo, Default} from "sequelize-typescript"
+import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey, ForeignKey, BelongsTo, HasMany} from "sequelize-typescript"
 import AdminModel from "./AdminModel"
+import ComplexImages from "./ComplexImages"
 
 @Table({ 
     tableName: "complex",
@@ -39,7 +40,7 @@ class ComplexModel extends Model {
     declare numberOfCourts: number
 
     @Column ({ 
-        type: DataType.INTEGER
+        type: DataType.BIGINT
     })
     declare phone: number
 
@@ -52,6 +53,9 @@ class ComplexModel extends Model {
 
     @BelongsTo(() => AdminModel)
     admin: AdminModel;
+
+    @HasMany(() => ComplexImages)
+    complexImages: ComplexImages[];
 
 }
 
