@@ -1,8 +1,9 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
-import { createComplex, getEveryComplex, getComplexByLocation } from "../controllers/Complex"
+import { createComplex, getEveryComplex, getComplexByLocation, getComplexById, deleteComplex } from "../controllers/Complex"
 import { handleInputErrors } from "../middlewares/HandleErrors"
 import { validateAdminExist } from "../middlewares/AdminValidations"
+import { validateComplexExist } from "../middlewares/ComplexValidations"
 
 const router = Router()
 
@@ -29,11 +30,21 @@ router.get("/complexByLocation",
     getComplexByLocation
 )
 
-router.get("/complexData/:complexId")
+router.get("/complexData/:complexId", 
+    param("complexId").notEmpty().withMessage("Es obligatorio indicar el ID del complejo"),
+    handleInputErrors,
+    validateComplexExist,
+    getComplexById
+)
 
 router.get("/complexShifts/:complexId")
 
-router.delete("/deleteComplex/:complexId")
+router.delete("/deleteComplex/:complexId",
+    param("complexId").notEmpty().withMessage("Es obligatorio indicar el ID del complejo"),
+    handleInputErrors,
+    validateComplexExist,
+    deleteComplex
+)
 
 router.put("/updateComplexData/:adminId")
 

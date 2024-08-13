@@ -7,6 +7,9 @@ import TokenRoutes from "./routes/Token"
 import UserRoutes from "./routes/User"
 import AdminRoutes from "./routes/Admin"
 import ComplexRoutes from "./routes/Complex"
+import ReviewsRoutes from "./routes/Review"
+import ShiftsRoutes from "./routes/Shifts"
+
 
 const port = process.env.PORT || 4000
 
@@ -21,6 +24,8 @@ app.use("/token", TokenRoutes);
 app.use("/user", UserRoutes);
 app.use("/admin", AdminRoutes);
 app.use("/complex", ComplexRoutes);
+app.use("/reviews", ReviewsRoutes);
+app.use("/shifts", ShiftsRoutes);
 
 
 

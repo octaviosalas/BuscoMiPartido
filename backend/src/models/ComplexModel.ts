@@ -1,6 +1,8 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey, ForeignKey, BelongsTo, HasMany} from "sequelize-typescript"
 import AdminModel from "./AdminModel"
 import ComplexImages from "./ComplexImages"
+import ReviewsModel from "./ReviewsModel"
+import ShiftsModel from "./ShiftsModel"
 
 @Table({ 
     tableName: "complex",
@@ -56,6 +58,12 @@ class ComplexModel extends Model {
 
     @HasMany(() => ComplexImages)
     complexImages: ComplexImages[];
+
+    @HasMany(() => ReviewsModel)
+    complexReviews: ReviewsModel[];
+
+    @HasMany(() => ShiftsModel)
+    complexShifts: ShiftsModel[];
 
 }
 

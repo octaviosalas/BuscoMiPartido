@@ -1,5 +1,7 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany} from "sequelize-typescript"
-import TeamModel from "./TeamModel"; // Importa el modelo de jugadores
+import TeamModel from "./TeamModel"; 
+import ReviewsModel from "./ReviewsModel";
+import ShiftsModel from "./ShiftsModel";
 
 @Table({ 
     tableName: "users",
@@ -30,6 +32,12 @@ class UserModel extends Model {
 
     @HasMany(() => TeamModel, { foreignKey: 'admin' }) 
     teams: TeamModel[];
+
+    @HasMany(() => ReviewsModel)
+    reviews: ReviewsModel[];
+
+    @HasMany(() => ShiftsModel)
+    shifts: ShiftsModel[];
 }
 
 export default UserModel
