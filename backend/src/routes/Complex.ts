@@ -1,6 +1,6 @@
 import {Router} from "express"
 import {body, param} from "express-validator"
-import { createComplex, getEveryComplex, getComplexByLocation, getComplexById, deleteComplex } from "../controllers/Complex"
+import { createComplex, getEveryComplex, getComplexByLocation, getComplexById, deleteComplex, getComplexShifts } from "../controllers/Complex"
 import { handleInputErrors } from "../middlewares/HandleErrors"
 import { validateAdminExist } from "../middlewares/AdminValidations"
 import { validateComplexExist } from "../middlewares/ComplexValidations"
@@ -37,7 +37,13 @@ router.get("/complexData/:complexId",
     getComplexById
 )
 
-router.get("/complexShifts/:complexId")
+router.get("/complexShifts/:complexId",
+    param("complexId").notEmpty().withMessage("Debes indicar de que complejo queres ver la disponibilidad"),
+    handleInputErrors,
+    validateComplexExist,
+    getComplexShifts
+)
+
 
 router.delete("/deleteComplex/:complexId",
     param("complexId").notEmpty().withMessage("Es obligatorio indicar el ID del complejo"),

@@ -29,20 +29,20 @@ class ShiftsModel extends Model {
       })
       declare available: boolean
 
-    @Column({
-        type: DataType.DATEONLY,
+      @Column({
+        type: DataType.DATE,
         allowNull: false,
       })
       declare date: string; 
     
       @Column({
-        type: DataType.TIME, 
+        type: DataType.DATE, 
         allowNull: false,
       })
       declare start: string; 
 
       @Column({
-        type: DataType.TIME, 
+        type: DataType.DATE, 
         allowNull: false,
       })
       declare end: string; 
@@ -56,8 +56,7 @@ class ShiftsModel extends Model {
 
       @BelongsTo(() => UserModel)
       userData: UserModel;
-    
-
+  
 }
 
 

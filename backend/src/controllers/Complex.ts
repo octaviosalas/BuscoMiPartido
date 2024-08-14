@@ -4,6 +4,8 @@ import ComplexImages from "../models/ComplexImages";
 import AdminModel from "../models/AdminModel";
 import ReviewsModel from "../models/ReviewsModel";
 import { calculateComplexPuntuactionPercentage } from "../utils/complexPunctuation";
+import ShiftsModel from "../models/ShiftsModel";
+import UserModel from "../models/UserModel";
 
 export const createComplex = async (req: Request, res: Response): Promise <void> => { 
     const {name, location, address, shiftPrice, numberOfCourts, phone, images} = req.body
@@ -134,6 +136,27 @@ export const deleteComplex = async (req: Request, res: Response): Promise <void>
       
       res.status(200).send("Se elimino correctamente el complejo del sistema")
 
+    } catch (error) {
+       res.status(500).send(error)
+       console.log(error)
+   }
+}
+
+export const getComplexShifts = async (req: Request, res: Response): Promise <void> => { 
+ 
+  const {complexId} = req.params
+
+    try {
+       const complexShiftsData = await ShiftsModel.findAll({ 
+          where: { 
+            complex: complexId
+          },
+          include: [{ 
+            model: UserModel,
+            attributes: ["name"]
+          }]
+       })
+       res.status(200).send(complexShiftsData)
     } catch (error) {
        res.status(500).send(error)
        console.log(error)
