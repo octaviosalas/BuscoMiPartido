@@ -44,7 +44,6 @@ router.get("/complexShifts/:complexId",
     getComplexShifts
 )
 
-
 router.delete("/deleteComplex/:complexId",
     param("complexId").notEmpty().withMessage("Es obligatorio indicar el ID del complejo"),
     handleInputErrors,

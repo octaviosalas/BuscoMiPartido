@@ -34,13 +34,6 @@ class PlayerModel extends Model {
   })
   declare age: number;
 
-  @Column({
-    type: DataType.STRING,
-    allowNull: true, 
-  })
-  declare photo?: string; 
-
-
 }
 
 export default PlayerModel;

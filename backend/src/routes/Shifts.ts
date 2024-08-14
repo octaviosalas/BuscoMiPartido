@@ -3,7 +3,8 @@ import { param, body } from "express-validator";
 import { handleInputErrors } from "../middlewares/HandleErrors";
 import { validateComplexExist, validateComplexIsAdminComplex } from "../middlewares/ComplexValidations";
 import { validateAdminExist } from "../middlewares/AdminValidations";
-import { createNewShift } from "../controllers/Shifts";
+import { createNewShift, updateShifStatus } from "../controllers/Shifts";
+import { validateShiftExist } from "../middlewares/ShiftsValidations";
 
 
 const router = Router()
@@ -21,5 +22,16 @@ router.post("/createShift/:complexId/:adminId",
     createNewShift
 )
 
+router.put("/updateShiftStatus/:shiftId/:complexId/:adminId",
+    param("adminId").notEmpty().withMessage("Es obligatorio indicar el ID del administrador"),
+    param("complexId").notEmpty().withMessage("Es obligatorio indicar el ID del complejo"),
+    param("shiftId").notEmpty().withMessage("Es obligatorio indicar el ID del turno"),
+    handleInputErrors,
+    validateComplexExist,
+    validateComplexIsAdminComplex,
+    validateAdminExist,
+    validateShiftExist,
+    updateShifStatus
+)
 
 export default router

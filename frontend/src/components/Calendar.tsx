@@ -31,9 +31,10 @@ const Calendar = () => {
        const transformData = data.map((data : ShiftState) => { 
            const newData = { 
               id: data.id,
-              title: "Ocupado",
+              title: data.available === true ? "Libre" : "Ocupado",
               start: data.start,
-              end: data.end
+              end: data.end,
+              backgroundColor: data.available === true ? "blue" : "red", // Asigna el color basado en la disponibilidad
            }
            return newData
        })
@@ -47,11 +48,20 @@ const Calendar = () => {
     getShifts()
   }, [])
 
-  useEffect(() => { 
-    console.log("events", events)
-  }, [events])
-
-
+  const renderEventContent = (eventInfo : any) => {
+    return eventInfo.event.backgroundColor === "red" ? (
+      <>
+        <button onClick={() => alert(`Haz clic en ${eventInfo.event.title}`)}>Detalles</button>
+        <div>{eventInfo.timeText}</div>
+        <div>{eventInfo.event.title}</div>
+      </>
+    ) : (
+      <>
+        <div>{eventInfo.timeText}</div>
+        <div>{eventInfo.event.title}</div>
+      </>
+    );
+  };
 
   return (
     <div>
@@ -63,7 +73,13 @@ const Calendar = () => {
           center: "title",
           end: "dayGridMonth,timeGridWeek,timeGridDay"
         }}
-        events={events} // Asigna el estado de eventos a la propiedad events de FullCalendar
+        events={events}
+        eventContent={renderEventContent} 
+        views={{
+          dayGridMonth: { minTime: '08:00am', maxTime: '18:00pm' },
+          timeGridWeek: { minTime: '08:00am', maxTime: '18:00pm' },
+          timeGridDay: { minTime: '08:00am', maxTime: '18:00pm' }
+        }}
       />
     </div>
   );

@@ -21,3 +21,18 @@ export const createNewShift = async (req: Request, res: Response): Promise<void>
         console.log(error);
     }
 } 
+
+export const updateShifStatus = async (req: Request, res: Response): Promise<void> => { 
+    
+    const {shiftId} = req.params;
+
+    try {
+        const shift = await ShiftsModel.findByPk(shiftId)
+        shift.available = !shift.available
+        await shift.save()
+        res.status(200).send("Turno almacenado");
+    } catch (error) {
+        res.status(500).send(error);
+        console.log(error);
+    }
+} 
