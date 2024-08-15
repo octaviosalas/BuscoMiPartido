@@ -4,6 +4,9 @@ import UserModel from "./UserModel";
 
 @Table({ 
     tableName: "reviews",
+    indexes: [
+        { fields: ['complex'] } 
+    ]
 })
 
 class ReviewsModel extends Model { 

@@ -4,6 +4,9 @@ import UserModel from "./UserModel";
 
 @Table({ 
     tableName: "teams",
+    indexes: [
+        { fields: ['userOwner'] } 
+    ]
 })
 
 class TeamModel extends Model { 
@@ -32,7 +35,7 @@ class TeamModel extends Model {
       type: DataType.INTEGER,
       allowNull: false,
     })
-    declare admin: number; 
+    declare userOwner: number; 
   
     @BelongsTo(() => UserModel)
     creatorData: UserModel;

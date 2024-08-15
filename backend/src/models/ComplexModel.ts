@@ -6,6 +6,9 @@ import ShiftsModel from "./ShiftsModel"
 
 @Table({ 
     tableName: "complex",
+    indexes: [
+        { fields: ['adminId'] },
+    ]
 })
 
 class ComplexModel extends Model { 

@@ -5,6 +5,10 @@ import UserModel from "./UserModel";
 
 @Table({ 
     tableName: "Shifts",
+    indexes: [
+      {fields: ["complex"]},
+      {fields: ["user"]}
+    ]
 })
 
 class ShiftsModel extends Model { 

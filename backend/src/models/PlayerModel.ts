@@ -3,7 +3,12 @@ import TeamModel from "./TeamModel";
 
 @Table({
   tableName: "players",
+  indexes: [ 
+    { fields: ['teamId'] }
+  ]
 })
+
+
 class PlayerModel extends Model {
   @PrimaryKey
   @AutoIncrement

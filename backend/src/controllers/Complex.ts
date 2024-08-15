@@ -6,41 +6,49 @@ import ReviewsModel from "../models/ReviewsModel";
 import { calculateComplexPuntuactionPercentage } from "../utils/complexPunctuation";
 import ShiftsModel from "../models/ShiftsModel";
 import UserModel from "../models/UserModel";
+import { database } from "../database/db";//para usar la transaccion
 
-export const createComplex = async (req: Request, res: Response): Promise <void> => { 
-    const {name, location, address, shiftPrice, numberOfCourts, phone, images} = req.body
-    const {adminId} = req.params
-    console.log(req.body)
-   try {
-       const newComplex = new ComplexModel({ 
-         name: name,
-         location: location,
-         address: address,
-         shiftPrice: shiftPrice,
-         numberOfCourts: numberOfCourts,
-         phone: phone,
-         adminId: adminId
-       })
-       await newComplex.save()
 
-       if(images.length > 0) { 
-        console.log("varias imagenes")
-         const imagesData = images.map((img : string) => { 
-            const imageInstance = new ComplexImages({ 
-                url: img,
-                complexId: newComplex.id
-            })
-            return imageInstance.save();
-         })
-         await Promise.all(imagesData);
-       }
 
-       res.status(200).send("Complejo guardado")
-    } catch (error) {
-         res.status(500).send(error)
-        console.log(error)
-    }
-}
+//Ejemplo de creacion de complejo con transaccion.
+export const createComplex = async (req: Request, res: Response): Promise<void> => {
+  const { name, location, address, shiftPrice, numberOfCourts, phone, images } = req.body;
+  const { adminId } = req.params;
+
+  let transaction; 
+
+  try {
+      const transaction = await database.transaction();
+
+      const newComplex = await ComplexModel.create({
+          name,
+          location,
+          address,
+          shiftPrice,
+          numberOfCourts,
+          phone,
+          adminId
+      }, { transaction });
+
+      if (images && images.length > 0) {
+          const imagesData = images.map((img: string) =>
+              ComplexImages.create({
+                  url: img,
+                  complexId: newComplex.id
+              }, { transaction })
+          );
+
+          await Promise.all(imagesData);
+      }
+
+      await transaction.commit(); 
+      res.status(200).send("Complejo guardado");
+  } catch (error) {
+      await transaction.rollback();
+      res.status(500).send(error);
+      console.log(error);
+  }
+};
 
 export const getEveryComplex = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -162,3 +170,43 @@ export const getComplexShifts = async (req: Request, res: Response): Promise <vo
        console.log(error)
    }
 }
+
+
+/*EJEMPLO DE CREATE COMPLEX SIN TRANSACCION
+
+export const createComplex = async (req: Request, res: Response): Promise <void> => { 
+    const {name, location, address, shiftPrice, numberOfCourts, phone, images} = req.body
+    const {adminId} = req.params
+    console.log(req.body)
+   try {
+       const newComplex = new ComplexModel({ 
+         name: name,
+         location: location,
+         address: address,
+         shiftPrice: shiftPrice,
+         numberOfCourts: numberOfCourts,
+         phone: phone,
+         adminId: adminId
+       })
+       await newComplex.save()
+
+       if(images.length > 0) { 
+        console.log("varias imagenes")
+         const imagesData = images.map((img : string) => { 
+            const imageInstance = new ComplexImages({ 
+                url: img,
+                complexId: newComplex.id
+            })
+            return imageInstance.save();
+         })
+         await Promise.all(imagesData);
+       }
+
+       res.status(200).send("Complejo guardado")
+    } catch (error) {
+         res.status(500).send(error)
+        console.log(error)
+    }
+}
+
+*/

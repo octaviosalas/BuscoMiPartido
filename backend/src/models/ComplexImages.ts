@@ -1,7 +1,12 @@
 import { Table, Model, Column, DataType, AutoIncrement, PrimaryKey, ForeignKey, BelongsTo } from "sequelize-typescript";
 import ComplexModel from "./ComplexModel";
 
-@Table({ tableName: "complexImages" })
+@Table({ 
+    tableName: "complexImages",
+    indexes: [
+        { fields: ['complexId'] } 
+    ]
+ })
 
 class ComplexImages extends Model {
     @PrimaryKey

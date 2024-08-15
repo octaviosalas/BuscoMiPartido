@@ -9,6 +9,7 @@ import AdminRoutes from "./routes/Admin"
 import ComplexRoutes from "./routes/Complex"
 import ReviewsRoutes from "./routes/Review"
 import ShiftsRoutes from "./routes/Shifts"
+import TeamRoutes from "./routes/Team"
 import { obtenerFechaActual, obtenerHorario17, obtenerHorario18 } from "./utils/hourDate"
 
 const port = process.env.PORT || 4000
@@ -26,6 +27,7 @@ app.use("/admin", AdminRoutes);
 app.use("/complex", ComplexRoutes);
 app.use("/reviews", ReviewsRoutes);
 app.use("/shifts", ShiftsRoutes);
+app.use("/team", TeamRoutes);
 
 
 
