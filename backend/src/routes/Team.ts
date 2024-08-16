@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares/HandleErrors";
-import { addPlayerToTeam } from "../controllers/Team";
-import { validateTeamExist, validateTeamPlayersQuantity, validateIfAdminIsTeamOwner } from "../middlewares/TeamValidations";
+import { addPlayerToTeam, teamData } from "../controllers/Team";
+import { validateTeamExist, validateTeamPlayersQuantity, validateIfAdminIsTeamOwner, validateIfPlayerAlreadyExistInTeam } from "../middlewares/TeamValidations";
 
 const router = Router()
 
@@ -15,7 +15,24 @@ router.post("/addPlayer/:teamId/:adminId",
    validateTeamExist,
    validateTeamPlayersQuantity,
    validateIfAdminIsTeamOwner,
+   validateIfPlayerAlreadyExistInTeam,
    addPlayerToTeam
 )
+
+router.get("/teamData/:teamId", 
+   param("teamId").notEmpty().withMessage("Debes indicar el ID del equipo que deseas obtenerr"),
+   handleInputErrors,
+   validateTeamExist,
+   teamData
+)
+
+router.delete("/teamData/:teamId", 
+   param("teamId").notEmpty().withMessage("Debes indicar el ID del equipo que deseas obtenerr"),
+   handleInputErrors,
+   validateTeamExist,
+   teamData
+)
+
+
 
 export default router

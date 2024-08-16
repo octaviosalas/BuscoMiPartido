@@ -1,10 +1,12 @@
 import PlayerModel from "../models/PlayerModel";
 import TeamModel from "../models/TeamModel";
 import { NextFunction, Request, Response } from "express";
+import { Op } from 'sequelize';
 
 export const validateTeamExist = async (req: Request, res: Response, next: NextFunction) => { 
      
     const {teamId} = req.params
+    console.log("RECIBI COMO ID", teamId)
 
     try {
        const teamSelected = await TeamModel.findByPk(teamId)
@@ -31,7 +33,6 @@ export const validateTeamPlayersQuantity = async (req: Request, res: Response, n
             teamId: teamId
         }
        })
-       console.log("Los jugadores que encontre del equipo en validateTeamPlayersQuantity", teamPlayers)
        
        if(teamPlayers.length >= 5) { 
          res.status(404).send("El equipo ya cuenta con 5 jugadores. Para añadir a otro, deberas sacar a quien este de mas.")
@@ -49,7 +50,6 @@ export const validateIfAdminIsTeamOwner = async (req: Request, res: Response, ne
      
     const {teamId, adminId} = req.params
 
-    console.log("El ID del admin que recibi", adminId)
 
     try {
        const teamSelected = await TeamModel.findByPk(teamId)
@@ -57,7 +57,6 @@ export const validateIfAdminIsTeamOwner = async (req: Request, res: Response, ne
 
        if(adminTeam !== Number(adminId)) { 
          res.status(404).send("Para poder agregar un jugador al equipo, debes ser el administrador del mismo")
-         console.log("El ID del admin no es el ID del adminsitrador real del equipo")
         } else { 
             next()
         }
@@ -66,4 +65,37 @@ export const validateIfAdminIsTeamOwner = async (req: Request, res: Response, ne
         console.log(error)
         res.status(500).json("Hubo un error en el midddleware")
     }
+}
+
+export const validateIfPlayerAlreadyExistInTeam = async (req: Request, res: Response, next: NextFunction) => { 
+     
+    const {teamId} = req.params
+    const {name} = req.body
+    console.log(name)
+
+    try {
+       const searchPlayer = await PlayerModel.findAll({ 
+        where: { 
+            name: { 
+                [Op.iLike]: name 
+            }
+        }
+       })
+
+      if(searchPlayer.length > 0) { 
+            const playerTeam = searchPlayer.map((player) => player.teamId)[0]
+            if(playerTeam === Number(teamId)) { 
+                res.status(404).send("El jugador ya forma parte del equipo")
+            } else { 
+                next()
+            }
+       } else { 
+          next()
+       }
+    
+     } catch (error) {
+        console.log(error)
+        res.status(500).json("Hubo un error en el midddleware")
+        console.log("UPS")
+     }
 }
