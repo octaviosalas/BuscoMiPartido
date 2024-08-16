@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares/HandleErrors";
-import { addPlayerToTeam, teamData } from "../controllers/Team";
+import { addPlayerToTeam, deletePlayer, teamData, updatePlayerData } from "../controllers/Team";
 import { validateTeamExist, validateTeamPlayersQuantity, validateIfAdminIsTeamOwner, validateIfPlayerAlreadyExistInTeam } from "../middlewares/TeamValidations";
+import { validatePlayerExist } from "../middlewares/PlayersValidation";
+import { validatePlayerExistIntoTeam } from "../middlewares/PlayersValidation";
 
 const router = Router()
 
@@ -26,13 +28,31 @@ router.get("/teamData/:teamId",
    teamData
 )
 
-router.delete("/teamData/:teamId", 
+router.delete("/deletePlayer/:teamId/:playerId", 
    param("teamId").notEmpty().withMessage("Debes indicar el ID del equipo que deseas obtenerr"),
+   param("playerId").notEmpty().withMessage("Debes indicar el ID del equipo que deseas obtenerr"),
    handleInputErrors,
    validateTeamExist,
-   teamData
+   validatePlayerExist,
+   validatePlayerExistIntoTeam,
+   deletePlayer
 )
 
+router.put("/updatePlayerData/:teamId/:playerId", 
+   param("teamId").notEmpty().withMessage("Debes indicar el ID del equipo que deseas obtenerr"),
+   param("playerId").notEmpty().withMessage("Debes indicar el ID del equipo que deseas obtenerr"),
+   body("name").notEmpty().withMessage("Debes indicar el nombre del jugador"),
+   body("age").notEmpty().withMessage("Debes indicar la edad del jugador"),
+   handleInputErrors,
+   validateTeamExist,
+   validatePlayerExist,
+   validatePlayerExistIntoTeam,
+   updatePlayerData
+)
+
+router.post("/createTeamAlert/:teamId", 
+   
+)
 
 
 export default router

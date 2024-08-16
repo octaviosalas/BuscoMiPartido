@@ -57,3 +57,41 @@ export const teamData = async (req: Request, res: Response): Promise <void> => {
         res.status(500).send(error)
     }
 }
+
+export const deletePlayer = async (req: Request, res: Response): Promise <void> => { 
+
+    const {teamId, playerId} = req.params
+
+    try {
+       const playerSelected = await PlayerModel.findByPk(playerId)
+       const playerName = playerSelected.name
+       await playerSelected.destroy()
+
+       const actualQuantityPlayer = await PlayerModel.findAll({
+         where: { 
+            teamId: teamId
+         }
+       })
+
+       const quantity = actualQuantityPlayer.length 
+       res.status(200).send(`Elminaste correctamente a ${playerName} del equipo. El equipo quedo con ${quantity} jugadores`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const updatePlayerData = async (req: Request, res: Response): Promise <void> => { 
+
+    const {teamId, playerId} = req.params
+
+    try {
+       const playerSelected = await PlayerModel.findByPk(playerId)
+       playerSelected.name = req.body.name
+       playerSelected.age = req.body.age
+       await playerSelected.save()
+
+       res.status(200).send(`Has modificado correctamente los datos del jugador`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}

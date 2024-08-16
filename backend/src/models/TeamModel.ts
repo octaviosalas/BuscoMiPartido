@@ -1,6 +1,7 @@
 import {Table, Model, Column, DataType, AutoIncrement, PrimaryKey,  HasMany, ForeignKey, BelongsTo} from "sequelize-typescript"
 import PlayerModel from "./PlayerModel"; // Importa el modelo de jugadores
 import UserModel from "./UserModel";
+import TeamSeekingMatchModel from "./TeamSeekingMatch";
 
 @Table({ 
     tableName: "teams",
@@ -39,6 +40,9 @@ class TeamModel extends Model {
   
     @BelongsTo(() => UserModel)
     creatorData: UserModel;
+
+    @HasMany(() => TeamSeekingMatchModel, { foreignKey: 'teamId' })
+    teamData: TeamSeekingMatchModel[];
 
     
 }
