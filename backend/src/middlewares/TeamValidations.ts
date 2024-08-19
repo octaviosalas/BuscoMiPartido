@@ -103,13 +103,13 @@ export const validateIfPlayerAlreadyExistInTeam = async (req: Request, res: Resp
 export const validateIfTeamHasOtherAlertInDay = async (req: Request, res: Response, next: NextFunction) => { 
      
     const {teamId} = req.params
-    const {date} = req.body
+    const {dateTime} = req.body
 
     try {
        const searchAlert = await TeamSeekingMatchModel.findAll({ 
         where: {
             teamId: teamId,
-            date: date
+            dateTime: dateTime
           }
        })
 
@@ -124,4 +124,23 @@ export const validateIfTeamHasOtherAlertInDay = async (req: Request, res: Respon
         res.status(500).json("Hubo un error en el midddleware")
         console.log("UPS")
      }
+}
+
+export const validateTeamAlertExist = async (req: Request, res: Response, next: NextFunction) => { 
+     
+    const {alertId} = req.params
+
+    try {
+       const alert = await TeamSeekingMatchModel.findByPk(alertId)
+
+       if(!alert) { 
+          res.status(400).json("La alerta de busqueda de rival no existe")
+        } else {
+          next()
+        }
+    
+    } catch (error) {
+        console.log(error)
+        res.status(500).json("Hubo un error en el midddleware")
+    }
 }

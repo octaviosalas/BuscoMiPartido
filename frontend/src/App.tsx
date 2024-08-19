@@ -1,23 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Calendar from './components/Calendar'
+import { Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import Calendar from "./components/Calendar";
+import Main from './components/Main/Main';
+import NavbarComponent from './components/Navbar/NavbarComponent';
+import MainLoginQuestion from './components/Login/MainLoginQuestion';
+//import { userStore } from './store/store';
 
 function App() {
-  const [count, setCount] = useState(0)
+
+
+  useEffect(() => {
+      document.body.style.backgroundImage = '#FFFFFF';
+  }, [location.pathname]);
+  
+  //const {user} = userStore()
+
+
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <Calendar/>
-    
-     
-      </div>
-    
+          <div className=''>
+            <NavbarComponent/>
+            <Routes>       
+               <Route path="/calendar" element={<Calendar />} />   
+               <Route path="/" element={<MainLoginQuestion />} />   
+               <Route path="/main" element={<Main />} />   
+
+            </Routes>
+           
+          </div>
     </>
   )
 }

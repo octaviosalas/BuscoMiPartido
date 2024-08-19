@@ -3,6 +3,7 @@ import TeamModel from "../models/TeamModel"
 import { Request, Response } from "express"
 import { calculateTeamAverage } from "../utils/calculateTeamAgeAverage"
 import TeamSeekingMatchModel from "../models/TeamSeekingMatch"
+import { formatDateTime } from "../utils/formatDateTime"
 
 export const addPlayerToTeam = async (req: Request, res: Response): Promise <void> => { 
 
@@ -101,19 +102,90 @@ export const updatePlayerData = async (req: Request, res: Response): Promise <vo
 export const createTeamAlert = async (req: Request, res: Response): Promise <void> => { 
 
     const {teamId} = req.params
-    const {date, hour} = req.params
+    const {dateTime} = req.body
 
     const teamReceived = await TeamModel.findByPk(teamId)
     const teamLocation = teamReceived.location
 
+    console.log("ENCONTRE LA LOCALIDAD DEL EQUIPO!", teamLocation)
+
     try {
         const newAlertToBeCreated = new TeamSeekingMatchModel({ 
             teamId: teamId,
-            date: date,
-            hour: hour,
+            dateTime: new Date(dateTime),
             location: teamLocation
         })
         await newAlertToBeCreated.save()
+        res.status(200).send("Hemos creado exitosamente tu alerta de busqueda de rival")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+export const getTeamsLookingForRival = async (req: Request, res: Response): Promise <void> => { 
+
+    try {
+        const teams = await TeamSeekingMatchModel.findAll({ 
+            include: [{ 
+                model: TeamModel,
+                as: "teamData"
+            }]
+        })
+        //const horaFormateada = formatDateTime(teams.map((t) => t.dateTime)[0])
+
+        res.status(200).send(teams)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const getTeamsLookingForRivalByLocation = async (req: Request, res: Response): Promise <void> => { 
+    
+    const {location} = req.body
+
+    try {
+        const teams = await TeamSeekingMatchModel.findAll({ 
+            where: { 
+                location: location
+            },
+            include: [{ 
+                model: TeamModel,
+                as: "teamData"
+            }]
+        })
+        res.status(200).send(teams)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const updateTeamAlert = async (req: Request, res: Response): Promise <void> => { 
+    
+    const {teamId, alertId} = req.params
+    const {dateTime} = req.body
+
+    try {
+        
+        const teamAlert = await TeamSeekingMatchModel.findByPk(alertId)
+        teamAlert.dateTime = dateTime
+        await teamAlert.save()
+        res.status(200).send("Se actualizo la alerta correctamente")
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+export const deleteTeamAlert = async (req: Request, res: Response): Promise <void> => { 
+    
+    const {teamId, alertId} = req.params
+
+    try {
+        
+        const teamAlert = await TeamSeekingMatchModel.findByPk(alertId)
+        teamAlert.destroy()
+        await teamAlert.save()
+        res.status(200).send("Se elimino la alerta correctamente")
     } catch (error) {
         res.status(500).send(error)
     }

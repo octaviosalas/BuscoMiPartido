@@ -1,8 +1,23 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares/HandleErrors";
-import { addPlayerToTeam, deletePlayer, teamData, updatePlayerData, createTeamAlert } from "../controllers/Team";
-import { validateTeamExist, validateTeamPlayersQuantity, validateIfAdminIsTeamOwner, validateIfPlayerAlreadyExistInTeam, validateIfTeamHasOtherAlertInDay } from "../middlewares/TeamValidations";
+import { 
+   addPlayerToTeam, 
+   deletePlayer, 
+   teamData,
+   updatePlayerData, 
+   createTeamAlert, 
+   getTeamsLookingForRival, 
+   getTeamsLookingForRivalByLocation, 
+   updateTeamAlert, 
+   deleteTeamAlert } from "../controllers/Team";
+import { 
+   validateTeamExist, 
+   validateTeamPlayersQuantity, 
+   validateIfAdminIsTeamOwner, 
+   validateIfPlayerAlreadyExistInTeam, 
+   validateIfTeamHasOtherAlertInDay, 
+   validateTeamAlertExist } from "../middlewares/TeamValidations";
 import { validatePlayerExist } from "../middlewares/PlayersValidation";
 import { validatePlayerExistIntoTeam } from "../middlewares/PlayersValidation";
 
@@ -51,13 +66,41 @@ router.put("/updatePlayerData/:teamId/:playerId",
 )
 
 router.post("/createTeamAlert/:teamId", 
-   body("date").notEmpty().withMessage("Debes indicar el dia que quieres jugar tu partido"),
-   body("hour").notEmpty().withMessage("Debes indicar la hora del partido que quieres jugar"),
+   body("dateTime").notEmpty().withMessage("Debes indicar la fecha y hora del partido que quieres jugar"),
    handleInputErrors,
    validateTeamExist,
    validateIfTeamHasOtherAlertInDay,
    createTeamAlert
 )
+
+router.get("/teamsLookingForRival", 
+   getTeamsLookingForRival
+)
+
+router.get("/teamsLookingForRivalByLocation", 
+   body("location").notEmpty().withMessage("Debes indicar el nombre del jugador"),
+   handleInputErrors,
+   getTeamsLookingForRivalByLocation
+)
+
+router.put("/updateTeamAlert/:teamId/:alertId", 
+   param("teamId").notEmpty().withMessage("Debes indicar el ID del equipo"),
+   param("alertId").notEmpty().withMessage("Debes indicar el ID de la alerta"),
+   body("dateTime").notEmpty().withMessage("Debes indicar la fecha y horario nueva para la alerta"),
+   handleInputErrors,
+   validateTeamExist,
+   validateTeamAlertExist,
+   updateTeamAlert
+)
+
+router.delete("/deleteTeamAlert/:teamId/:alertId", 
+   param("teamId").notEmpty().withMessage("Debes indicar el ID del equipo"),
+   param("alertId").notEmpty().withMessage("Debes indicar el ID de la alerta"),
+   handleInputErrors,
+   validateTeamAlertExist,
+   deleteTeamAlert
+)
+
 
 
 export default router

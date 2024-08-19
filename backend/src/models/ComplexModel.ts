@@ -32,6 +32,11 @@ class ComplexModel extends Model {
     @Column ({ 
         type: DataType.STRING
     })
+    declare province: string
+
+    @Column ({ 
+        type: DataType.STRING
+    })
     declare address: string
 
     @Column ({ 

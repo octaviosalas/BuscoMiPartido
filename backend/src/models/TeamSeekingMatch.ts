@@ -26,18 +26,14 @@ class TeamSeekingMatchModel extends Model {
     @BelongsTo(() => TeamModel)
     teamData: TeamModel;
 
-    @Column ({ 
-        type: DataType.DATE
+    @Column({
+        type: DataType.DATE, // Sequelize DATE almacena tanto fecha como hora con zona horaria
+        allowNull: false,
     })
-    declare date: string
+    declare dateTime: Date;
 
     @Column ({ 
-        type: DataType.DATE
-    })
-    declare hour: string
-
-    @Column ({ 
-        type: DataType.DATE
+        type: DataType.STRING
     })
     declare location: string
 

@@ -64,7 +64,7 @@ const Calendar = () => {
   };
 
   return (
-    <div>
+    <div className="border border-red-600 w-screen">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView={"dayGridMonth"}
