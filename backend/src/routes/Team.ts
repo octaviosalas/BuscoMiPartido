@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares/HandleErrors";
-import { addPlayerToTeam, deletePlayer, teamData, updatePlayerData } from "../controllers/Team";
-import { validateTeamExist, validateTeamPlayersQuantity, validateIfAdminIsTeamOwner, validateIfPlayerAlreadyExistInTeam } from "../middlewares/TeamValidations";
+import { addPlayerToTeam, deletePlayer, teamData, updatePlayerData, createTeamAlert } from "../controllers/Team";
+import { validateTeamExist, validateTeamPlayersQuantity, validateIfAdminIsTeamOwner, validateIfPlayerAlreadyExistInTeam, validateIfTeamHasOtherAlertInDay } from "../middlewares/TeamValidations";
 import { validatePlayerExist } from "../middlewares/PlayersValidation";
 import { validatePlayerExistIntoTeam } from "../middlewares/PlayersValidation";
 
@@ -51,7 +51,12 @@ router.put("/updatePlayerData/:teamId/:playerId",
 )
 
 router.post("/createTeamAlert/:teamId", 
-   
+   body("date").notEmpty().withMessage("Debes indicar el dia que quieres jugar tu partido"),
+   body("hour").notEmpty().withMessage("Debes indicar la hora del partido que quieres jugar"),
+   handleInputErrors,
+   validateTeamExist,
+   validateIfTeamHasOtherAlertInDay,
+   createTeamAlert
 )
 
 

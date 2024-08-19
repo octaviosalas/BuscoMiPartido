@@ -2,6 +2,7 @@ import PlayerModel from "../models/PlayerModel";
 import TeamModel from "../models/TeamModel";
 import { NextFunction, Request, Response } from "express";
 import { Op } from 'sequelize';
+import TeamSeekingMatchModel from "../models/TeamSeekingMatch";
 
 export const validateTeamExist = async (req: Request, res: Response, next: NextFunction) => { 
      
@@ -89,6 +90,31 @@ export const validateIfPlayerAlreadyExistInTeam = async (req: Request, res: Resp
             } else { 
                 next()
             }
+       } else { 
+          next()
+       }
+    
+     } catch (error) {
+        console.log(error)
+        res.status(500).json("Hubo un error en el midddleware")
+     }
+}
+
+export const validateIfTeamHasOtherAlertInDay = async (req: Request, res: Response, next: NextFunction) => { 
+     
+    const {teamId} = req.params
+    const {date} = req.body
+
+    try {
+       const searchAlert = await TeamSeekingMatchModel.findAll({ 
+        where: {
+            teamId: teamId,
+            date: date
+          }
+       })
+
+      if(searchAlert.length > 0) { 
+            res.status(202).send("Ya tenes una alerta de busqueda de partido en esta fecha")           
        } else { 
           next()
        }

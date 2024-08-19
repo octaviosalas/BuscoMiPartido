@@ -10,7 +10,7 @@ import ComplexRoutes from "./routes/Complex"
 import ReviewsRoutes from "./routes/Review"
 import ShiftsRoutes from "./routes/Shifts"
 import TeamRoutes from "./routes/Team"
-import { obtenerFechaActual, obtenerHorario17, obtenerHorario18 } from "./utils/hourDate"
+import { getCurrentDate, getCurrentTimeAdjusted } from "./utils/hourDate"
 
 const port = process.env.PORT || 4000
 
@@ -34,9 +34,8 @@ app.use("/team", TeamRoutes);
 app.listen(port, () => { 
      console.log(`REST API BuscoPartido - TypeScript funcionando en el puerto ${port}`)
      connectDatabase()
-     obtenerFechaActual()
-     obtenerHorario17()
-     obtenerHorario18()
+     getCurrentDate()
+     getCurrentTimeAdjusted()
 })
 
 

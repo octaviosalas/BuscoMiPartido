@@ -36,6 +36,11 @@ class TeamSeekingMatchModel extends Model {
     })
     declare hour: string
 
+    @Column ({ 
+        type: DataType.DATE
+    })
+    declare location: string
+
 }
 
 export default TeamSeekingMatchModel

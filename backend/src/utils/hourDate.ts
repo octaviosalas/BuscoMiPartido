@@ -1,21 +1,15 @@
-export function obtenerFechaActual() {
-    const fechaActual = new Date();
-    console.log(fechaActual)
-    return fechaActual.toLocaleDateString(); // Formato: "dd/mm/yyyy"
+export function getCurrentDate() {
+    const today = new Date();
+    console.log("fecha", today.toISOString())
+    return today.toISOString(); // Ejemplo: "2024-08-16T21:50:58.174Z"
 }
 
-// Función que retorna un horario correspondiente a las 17:00 horas
-export function obtenerHorario17() {
-    const horario17 = new Date();
-    horario17.setHours(17, 0, 0, 0); // Establece la hora a las 17:00:00
-    console.log(horario17)
-    return horario17.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato: "17:00"
-}
-
-// Función que retorna un horario correspondiente a las 18:00 horas
-export function obtenerHorario18() {
-    const horario18 = new Date();
-    horario18.setHours(18, 0, 0, 0); // Establece la hora a las 18:00:00
-    console.log(horario18)
-    return horario18.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Formato: "18:00"
+// Función para obtener una hora específica en el día actual (por ejemplo, las 20:00:00)
+export function getCurrentTimeAdjusted() {
+    const now = new Date();
+    
+    // Ajustar la hora actual a la hora completa sin minutos ni segundos
+    now.setUTCHours(now.getUTCHours(), 0, 0, 0); // Ajusta los minutos, segundos, y milisegundos a 0
+     console.log("hora", now.toISOString())
+    return now.toISOString(); // Devuelve en formato ISO 8601
 }

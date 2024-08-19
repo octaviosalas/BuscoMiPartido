@@ -2,6 +2,7 @@ import PlayerModel from "../models/PlayerModel"
 import TeamModel from "../models/TeamModel"
 import { Request, Response } from "express"
 import { calculateTeamAverage } from "../utils/calculateTeamAgeAverage"
+import TeamSeekingMatchModel from "../models/TeamSeekingMatch"
 
 export const addPlayerToTeam = async (req: Request, res: Response): Promise <void> => { 
 
@@ -91,6 +92,28 @@ export const updatePlayerData = async (req: Request, res: Response): Promise <vo
        await playerSelected.save()
 
        res.status(200).send(`Has modificado correctamente los datos del jugador`)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+
+export const createTeamAlert = async (req: Request, res: Response): Promise <void> => { 
+
+    const {teamId} = req.params
+    const {date, hour} = req.params
+
+    const teamReceived = await TeamModel.findByPk(teamId)
+    const teamLocation = teamReceived.location
+
+    try {
+        const newAlertToBeCreated = new TeamSeekingMatchModel({ 
+            teamId: teamId,
+            date: date,
+            hour: hour,
+            location: teamLocation
+        })
+        await newAlertToBeCreated.save()
     } catch (error) {
         res.status(500).send(error)
     }
