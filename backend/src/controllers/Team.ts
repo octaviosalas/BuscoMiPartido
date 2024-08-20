@@ -3,7 +3,7 @@ import TeamModel from "../models/TeamModel"
 import { Request, Response } from "express"
 import { calculateTeamAverage } from "../utils/calculateTeamAgeAverage"
 import TeamSeekingMatchModel from "../models/TeamSeekingMatch"
-import { formatDateTime } from "../utils/formatDateTime"
+import UserModel from "../models/UserModel"
 
 export const addPlayerToTeam = async (req: Request, res: Response): Promise <void> => { 
 
@@ -98,7 +98,6 @@ export const updatePlayerData = async (req: Request, res: Response): Promise <vo
     }
 }
 
-
 export const createTeamAlert = async (req: Request, res: Response): Promise <void> => { 
 
     const {teamId} = req.params
@@ -122,7 +121,6 @@ export const createTeamAlert = async (req: Request, res: Response): Promise <voi
     }
 }
 
-
 export const getTeamsLookingForRival = async (req: Request, res: Response): Promise <void> => { 
 
     try {
@@ -142,8 +140,11 @@ export const getTeamsLookingForRival = async (req: Request, res: Response): Prom
 
 export const getTeamsLookingForRivalByLocation = async (req: Request, res: Response): Promise <void> => { 
     
-    const {location} = req.body
+    const {location} = req.params
+    console.log(location)
 
+
+    //   where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('location')), Sequelize.fn('lower', location)),
     try {
         const teams = await TeamSeekingMatchModel.findAll({ 
             where: { 
@@ -151,9 +152,14 @@ export const getTeamsLookingForRivalByLocation = async (req: Request, res: Respo
             },
             include: [{ 
                 model: TeamModel,
-                as: "teamData"
+                as: "teamData",
+                include: [{ 
+                    model: UserModel, // Aquí incluyes el modelo UserModel
+                    as: "creatorData",  // Asegúrate de que el alias coincida con el definido en las asociaciones de Sequelize
+                }]
             }]
         })
+        
         res.status(200).send(teams)
     } catch (error) {
         res.status(500).send(error)

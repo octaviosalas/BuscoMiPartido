@@ -27,6 +27,11 @@ class TeamModel extends Model {
         type: DataType.STRING
     })
     declare location: string
+
+    @Column ({ 
+        type: DataType.BIGINT
+    })
+    declare phone: number
  
     @HasMany(() => PlayerModel, { foreignKey: 'teamId' })
     players: PlayerModel[];

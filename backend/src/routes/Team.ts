@@ -77,8 +77,8 @@ router.get("/teamsLookingForRival",
    getTeamsLookingForRival
 )
 
-router.get("/teamsLookingForRivalByLocation", 
-   body("location").notEmpty().withMessage("Debes indicar el nombre del jugador"),
+router.get("/teamsLookingForRivalByLocation/:location", 
+   param("location").notEmpty().withMessage("Debes indicar el nombre del jugador"),
    handleInputErrors,
    getTeamsLookingForRivalByLocation
 )

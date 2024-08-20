@@ -15,7 +15,7 @@ const MainLoginQuestion = () => {
     const [load, setLoad] = useState<boolean>(false)
 
     const navigate = useNavigate()
-    const {setUserAccountData} = userStore()
+    const {setUserAccountData, user} = userStore()
 
     const searchLocation = async (locationValue : string) => { 
             setLoad(true)
@@ -56,6 +56,10 @@ const MainLoginQuestion = () => {
         })
         navigate("/main")
     }
+    
+    useEffect(() => { 
+        console.log("cambio user", user)
+     }, [user])
 
   return (
     <div className='mt-24 flex flex-col items-center justify-center'>
@@ -75,9 +79,9 @@ const MainLoginQuestion = () => {
                 : null}
 
                 {!load && municipalities.length > 0 && !failedSearch? 
-                     <Select placeholder='Municipios' className='border rounded-lg w-auto mt-4 lg:w-72 xl:w-96' onChange={(e) => setMunicipalitieSelected(e.target.value)}>
+                     <Select label='Municipios' className='border rounded-lg w-auto mt-4 lg:w-72 xl:w-96' onChange={(e) => setMunicipalitieSelected(e.target.value)}>
                         {municipalities.map((mun) => (
-                                <SelectItem key={mun} value={mun}>{mun}</SelectItem>
+                                <SelectItem key={mun} textValue={mun}>{mun}</SelectItem>
                             ))}
                      </Select> 
                 : null}

@@ -7,12 +7,12 @@ import { calculateComplexPuntuactionPercentage } from "../utils/complexPunctuati
 import ShiftsModel from "../models/ShiftsModel";
 import UserModel from "../models/UserModel";
 import { database } from "../database/db";//para usar la transaccion
-
+import { Sequelize } from "sequelize";
 
 
 //Ejemplo de creacion de complejo con transaccion.
 export const createComplex = async (req: Request, res: Response): Promise<void> => {
-  const { name, location, address, shiftPrice, numberOfCourts, phone, images } = req.body;
+  const { name, location, province, address, shiftPrice, numberOfCourts, phone, images } = req.body;
   const { adminId } = req.params;
 
   let transaction; 
@@ -23,6 +23,7 @@ export const createComplex = async (req: Request, res: Response): Promise<void> 
       const newComplex = await ComplexModel.create({
           name,
           location,
+          province,
           address,
           shiftPrice,
           numberOfCourts,
@@ -73,13 +74,11 @@ export const getEveryComplex = async (req: Request, res: Response): Promise<void
 
 export const getComplexByLocation = async (req: Request, res: Response): Promise <void> => { 
  
-  const {location} = req.body
+  const {location} = req.params
 
   try {
       const complexes = await ComplexModel.findAll({
-        where: {
-          location: location 
-         },
+        where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('location')), Sequelize.fn('lower', location)),
         include: [
             {
                 model: ComplexImages,

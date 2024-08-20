@@ -10,6 +10,7 @@ const router = Router()
 router.post("/createComplex/:adminId",
     param("adminId").notEmpty().withMessage("Es obligatorio indicar el ID del administrador"),
     body("name").notEmpty().withMessage("Es obligatorio indicar el nombre del complejo"),
+    body("province").notEmpty().withMessage("Es obligatorio indicar la provincia donde radica el complejo"),
     body("location").notEmpty().withMessage("Es obligatorio indicar la localidad del complejo"),
     body("shiftPrice").notEmpty().withMessage("Es obligatorio indicar el valor del turno del complejo"),
     body("address").notEmpty().withMessage("Es obligatorio indicar la direccion exacta del complejo"),
@@ -24,8 +25,8 @@ router.get("/everyComplex",
     getEveryComplex
 )
 
-router.get("/complexByLocation",
-    body("location").notEmpty().withMessage("La localidad es obligatoria"),
+router.get("/complexByLocation/:location",
+    param("location").notEmpty().withMessage("La localidad es obligatoria"),
     handleInputErrors,
     getComplexByLocation
 )
